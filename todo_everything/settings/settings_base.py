@@ -43,7 +43,10 @@ BASE_APPS = (
     "django.contrib.staticfiles",
 )
 
-USER_APPS = ("todo_everything.apps.accounts",)
+USER_APPS = (
+    "todo_everything.apps.accounts",
+    "todo_everything.apps.todos",
+)
 
 INSTALLED_APPS = BASE_APPS + USER_APPS
 
