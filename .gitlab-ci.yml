@@ -1,0 +1,29 @@
+default:
+  image: python:3.7-stretch
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIPENV_IS_CI: 1
+  PIPENV_CACHE_DIR: ".cache/pipenv"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+
+before_script:
+  - "apt update"
+  - "pip install --user pipenv"
+
+test:
+  # Pip's cache doesn't store the python packages
+  # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+  #
+  # If you want to also cache the installed packages, you have to install
+  # them in a virtualenv and cache it as well.
+  cache:
+    key: "$CI_COMMIT_REF_SLUG"
+    paths:
+      - ".cache/pip"
+      - ".cache/pipenv"
+  before_script:
+    - "pip install pipenv"
+    - "pipenv install --dev"
+  script: "pipenv run python -m pytest"
