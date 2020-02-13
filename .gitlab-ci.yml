@@ -1,0 +1,50 @@
+default:
+  image: python:3.7-slim-buster
+
+stages:
+  - build
+  - test
+
+# Change pip's cache directory to be inside the project directory since we can
+# only cache local items.
+variables:
+  PIPENV_IS_CI: 1
+  PIPENV_CACHE_DIR: ".cache/pipenv"
+  PIP_CACHE_DIR: "$CI_PROJECT_DIR/.cache/pip"
+  CONTAINER_TEST_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG
+  CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
+
+build:
+  image: docker:19.03.1
+  services:
+    - docker:19.03.1-dind
+  stage: build
+  # Only build when there's changes to the following
+  only:
+    changes:
+      - "docker/**/*"
+      - ".gitalb-ci.yml"
+  before_script:
+    - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
+  script:
+    - docker build --pull -t $CONTAINER_TEST_IMAGE -f docker/local/web/Dockerfile .
+    - docker push $CONTAINER_TEST_IMAGE
+
+test:
+  stage: test
+  image: $CONTAINER_TEST_IMAGE
+  # Pip's cache doesn't store the python packages
+  # https://pip.pypa.io/en/stable/reference/pip_install/#caching
+  #
+  # If you want to also cache the installed packages, you have to install
+  # them in a virtualenv and cache it as well.
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+      - "$PIPENV_CACHE_DIR"
+      - "$PIP_CACHE_DIR"
+  # pipenv doesn't need to trigger an install since the Dockerfile installs
+  # dependencies via --system.
+  #  before_script:
+  #    - /home/webapp/.local/bin/pipenv install --dev --system
+  script: python -m pytest $CI_PROJECT_DIR

@@ -1,0 +1,16 @@
+version: '3.7'
+
+services:
+  web:
+    build:
+      context: .
+      # Disabling pipenv for now, testing poetry
+      # dockerfile: ./docker/local/web/Dockerfile
+      dockerfile: ./docker/local/web/Dockerfile-poetry
+    command: poetry run todo_everything/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./todo_everything:/home/webapp/todo_everything
+    ports:
+      - 8000:8000
+    env_file:
+      - ./docker/.env.dev
