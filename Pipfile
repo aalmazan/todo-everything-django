@@ -18,6 +18,7 @@ hypothesis = "*"
 pre-commit = "*"
 ipython = "*"
 pytest-cov = "*"
+model-bakery = "*"
 
 [packages]
 django = "*"
