@@ -1,19 +1,18 @@
 # pull official base image
-FROM python:3.7-slim-buster
+FROM python:3.11-slim-bullseye
 
 RUN useradd --create-home webapp
 
 # set work directory
 WORKDIR /home/webapp
-USER webapp
 
 # set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 # install dependencies
-RUN pip install --upgrade pip
-RUN pip install poetry
+RUN pip3 install --upgrade pip
+RUN pip3 install poetry
 
 # Install poetry
 #RUN pip install --user poetry
@@ -24,8 +23,12 @@ ENV PATH="${PATH}:/home/webapp/.local/bin"
 COPY poetry.lock .
 COPY pyproject.toml .
 COPY pytest.ini .
+RUN poetry --version
 RUN poetry config virtualenvs.create false --local
-RUN set -ex && poetry install --no-interaction --no-root
+RUN set -ex && poetry install --no-interaction --no-root --no-ansi
+RUN chown webapp:webapp poetry*
+
+USER webapp
 
 # copy project
 # COPY ../todo_everything /usr/src/app/
