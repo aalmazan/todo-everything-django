@@ -16,8 +16,6 @@ RUN pip3 install poetry
 
 # Install poetry
 #RUN pip install --user poetry
-#COPY ./docker/get-poetry.py .
-#RUN python get-poetry.py -y
 ENV PATH="${PATH}:/home/webapp/.local/bin"
 
 COPY poetry.lock .

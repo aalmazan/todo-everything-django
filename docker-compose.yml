@@ -6,7 +6,7 @@ services:
       context: .
       # Disabling pipenv for now, testing poetry
       # dockerfile: ./docker/local/web/Dockerfile
-      dockerfile: ./docker/local/Dockerfile-web
+      dockerfile: docker/Dockerfile-web
     command: poetry run todo_everything/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./todo_everything:/home/webapp/todo_everything
