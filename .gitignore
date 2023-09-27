@@ -125,3 +125,5 @@ dmypy.json
 
 # Local django dev dbs
 *.sqlite3
+
+.idea/
