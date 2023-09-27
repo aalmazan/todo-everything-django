@@ -23,7 +23,7 @@ COPY pyproject.toml .
 COPY pytest.ini .
 RUN poetry --version
 RUN poetry config virtualenvs.create false --local
-RUN set -ex && poetry install --no-interaction --no-root --no-ansi
+RUN set -ex && poetry install --no-interaction --no-root --no-ansi --with dev
 RUN chown webapp:webapp poetry*
 
 USER webapp
