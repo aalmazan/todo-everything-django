@@ -6,10 +6,12 @@ from invoke import task
 
 
 @task
-def pytest(c):
+def pytest(c, target="."):
     """
     Run pytest.
 
     `poetry run invoke pytest`
     """
-    c.run("python -m pytest")
+    if not target:
+        target = ""
+    c.run(f"python -m pytest {target}")

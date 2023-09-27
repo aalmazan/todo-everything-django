@@ -42,4 +42,4 @@ test:
     # container is loaded and will create a new virtualenv -- which will then
     # require a reinstall of all dependencies.
     - poetry config virtualenvs.create false --local
-  script: poetry run python -m pytest $CI_PROJECT_DIR
+  script: poetry run invoke pytest --target=$CI_PROJECT_DIR
