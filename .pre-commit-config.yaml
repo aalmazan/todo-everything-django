@@ -9,16 +9,16 @@ repos:
     -   id: check-merge-conflict
     -   id: flake8
 -   repo: https://github.com/psf/black
-    rev: 19.10b0
+    rev: 23.9.1
     hooks:
     - id: black
-      language_version: python3.7
+      language_version: python3.11
 # Use autopep8 instead if `black` is too strict.
 #-   repo: https://github.com/pre-commit/mirrors-autopep8
 #    rev: ''  # Use the sha / tag you want to point at
 #    hooks:
 #    -   id: autopep8
 -   repo: https://github.com/pre-commit/mirrors-isort
-    rev: v4.3.21  # Use the revision sha / tag you want to point at
+    rev: v5.10.1  # Use the revision sha / tag you want to point at
     hooks:
     -   id: isort

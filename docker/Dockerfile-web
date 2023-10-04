@@ -1,5 +1,11 @@
 # pull official base image
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim-bullseye as base
+
+RUN apt update && apt install -y \
+    libpq-dev \
+    build-essential
+
+FROM base as dependencies
 
 RUN useradd --create-home webapp
 
