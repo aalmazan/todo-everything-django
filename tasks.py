@@ -32,6 +32,9 @@ def dc_bash(c):
 
 
 @task
-def dc_run(c, command):
+def dc_manage(c, command):
     """docker-compose run <something>."""
-    c.run(f"docker-compose --file {DOCKER_COMPOSE_FILE} {command}")
+    c.run(
+        f"docker-compose --file {DOCKER_COMPOSE_FILE} run web python /home/webapp/todo_everything/manage.py {command}",
+        pty=True,
+    )
