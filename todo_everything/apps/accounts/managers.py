@@ -15,6 +15,7 @@ class AccountManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+    @transaction.atomic
     def create_user(self, email, password=None, **extra_fields):
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
