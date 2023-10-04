@@ -13,9 +13,9 @@ variables:
   CONTAINER_RELEASE_IMAGE: $CI_REGISTRY_IMAGE:latest
 
 build:
-  image: docker:19.03.1
+  image: docker:24.0.6
   services:
-    - docker:19.03.1-dind
+    - docker:24.0.6-dind
   stage: build
   # Only build when there's changes to the following
   only:
