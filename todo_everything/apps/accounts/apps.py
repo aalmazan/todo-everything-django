@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class AccountsConfig(AppConfig):
-    name = "accounts"
+    name = "todo_everything.apps.accounts"

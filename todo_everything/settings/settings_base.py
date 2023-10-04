@@ -12,13 +12,13 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 
 import os
 import sys
+from pathlib import Path
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Add path to main project dir. Prevents import errors due to missing PATHs
 sys.path.insert(0, os.path.dirname(os.path.join(BASE_DIR)))
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -43,7 +43,10 @@ BASE_APPS = (
     "django.contrib.staticfiles",
 )
 
-USER_APPS = ("todo_everything.apps.accounts",)
+USER_APPS = (
+    "todo_everything.apps.accounts.apps.AccountsConfig",
+    "todo_everything.apps.todos.apps.TodoConfig",
+)
 
 INSTALLED_APPS = BASE_APPS + USER_APPS
 

@@ -9,3 +9,10 @@ class AccountFactory(factory.django.DjangoModelFactory):
 
     class Meta:
         model = "accounts.Account"
+
+
+class AccountProfileFactory(factory.django.DjangoModelFactory):
+    """Factory to create custom user AccountProfile instances."""
+
+    class Meta:
+        model = "accounts.AccountProfile"
