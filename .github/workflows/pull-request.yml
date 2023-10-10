@@ -1,6 +1,6 @@
-name: Lint
+name: Run tests
 
-on: [pull_request]
+on: [ pull_request ]
 
 jobs:
   build:
@@ -30,5 +30,15 @@ jobs:
           key: venv-${{ hashFiles('poetry.lock') }}
       - name: Install the project dependencies
         run: poetry install
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
       - name: Run linters
         run: poetry run pre-commit run --files ${{ steps.changed-files.outputs.all_changed_files }}
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run tests
+        run: poetry run invoke pytest
