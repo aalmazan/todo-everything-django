@@ -1,5 +1,6 @@
 import pytest
 from model_bakery import baker
+
 from todo_everything.apps.todos.models import Todo
 
 

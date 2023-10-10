@@ -24,5 +24,10 @@ class Account(AbstractUser):
 class AccountProfile(models.Model):
     """Additional info for user accounts."""
 
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    full_name = models.TextField(max_length=128)
+    account = models.OneToOneField(
+        Account, on_delete=models.CASCADE, related_name="profile"
+    )
+    full_name = models.TextField(max_length=128, null=True, blank=True)
+
+    class Meta:
+        db_table = "account_profile"

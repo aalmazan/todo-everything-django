@@ -1,5 +1,6 @@
 from django.db import models
 from model_utils.models import SoftDeletableModel, TimeStampedModel
+
 from todo_everything.mixins.models import common
 
 
