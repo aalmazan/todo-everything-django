@@ -4,5 +4,5 @@ from . import models, serializers
 
 
 class TodoViewSet(viewsets.ModelViewSet):
-    queryset = models.Account.objects.all()
-    serializer_class = serializers.AccountSerializer
+    queryset = models.Todo.objects.all()
+    serializer_class = serializers.TodoSerializer

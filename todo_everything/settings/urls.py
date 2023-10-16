@@ -19,10 +19,12 @@ from rest_framework import routers
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 from todo_everything.apps.accounts import api as accounts_api
+from todo_everything.apps.todos import api as todos_api
 
 router = routers.DefaultRouter()
 router.register(r"account", accounts_api.AccountViewSet)
 router.register(r"profile", accounts_api.AccountProfileViewSet)
+router.register(r"todo", todos_api.TodoViewSet)
 
 urlpatterns = [
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),

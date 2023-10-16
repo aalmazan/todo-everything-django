@@ -42,11 +42,18 @@ BASE_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    # "celery",
+    # "kombu.transport.django",
 )
 
 USER_APPS = (
     "todo_everything.apps.accounts.apps.AccountsConfig",
     "todo_everything.apps.todos.apps.TodoConfig",
+)
+
+CELERY_IMPORTS = (
+    "todo_everything.apps.accounts.tasks",
+    "todo_everything.apps.todos.tasks",
 )
 
 INSTALLED_APPS = BASE_APPS + USER_APPS
