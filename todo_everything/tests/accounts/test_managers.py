@@ -2,11 +2,10 @@ from unittest import mock
 
 import hypothesis.strategies as st
 import pytest
+from accounts.models import Account
 from django.db.models.signals import post_save, pre_save
 from hypothesis import given
 from hypothesis.extra.django import TestCase as HypothesisTestCase
-
-from todo_everything.apps.accounts.models import Account
 
 
 @pytest.fixture(autouse=True)  # Automatically use in tests.
@@ -26,7 +25,7 @@ class AccountManagerTestCase(HypothesisTestCase):
     def test_create_user_valid(self, email):
         """Test create_user with valid options."""
         with mock.patch(
-            "todo_everything.apps.accounts.managers.AccountManager._create_user"
+            "accounts.managers.AccountManager._create_user"
         ) as mock_create_user:
             Account.objects.create_user(email)
 
@@ -36,7 +35,7 @@ class AccountManagerTestCase(HypothesisTestCase):
     def test_create_superuser_valid(self, email):
         """Test create_user with valid options."""
         with mock.patch(
-            "todo_everything.apps.accounts.managers.AccountManager._create_user"
+            "accounts.managers.AccountManager._create_user"
         ) as mock_create_user:
             Account.objects.create_superuser(email, "some-password")
 

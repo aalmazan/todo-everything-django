@@ -5,7 +5,7 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile-web
-    command: poetry run todo_everything/manage.py runserver 0.0.0.0:8000
+    command: python todo_everything/manage.py runserver 0.0.0.0:8000
     volumes:
       - ./todo_everything:/home/webapp/todo_everything
     ports:
@@ -25,7 +25,11 @@ services:
     build:
       context: .
       dockerfile: docker/Dockerfile-web
-    command: poetry run celery --app todo_everything.settings worker -l info
+    # IMPORTANT: Need this or else celery won't be able to figure out the Django
+    #   app's paths and all the Django app's settings paths won't point to the
+    #   right thing.
+    working_dir: /home/webapp/todo_everything
+    command: celery --app todo_everything worker -l info
     volumes:
       - ./todo_everything:/home/webapp/todo_everything
     env_file:

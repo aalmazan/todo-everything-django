@@ -1,7 +1,6 @@
 import pytest
 from model_bakery import baker
-
-from todo_everything.apps.todos.models import Todo
+from todos.models import Todo
 
 
 @pytest.mark.django_db
