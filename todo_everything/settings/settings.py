@@ -23,8 +23,9 @@ sys.path.insert(0, os.path.dirname(os.path.join(BASE_DIR)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "o2a9gh2fadxg28sc266r$28hb%&!x5cji$ezky^bj_f*7-68vb"
+SECRET_KEY = os.getenv(
+    "SECRET_KEY", "+xw6)wkb5cy736gu90txxp3dsa_lx%8%hls%x@$e409f-2c7z*"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -42,18 +43,13 @@ BASE_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
-    # "celery",
+    "celery",
     # "kombu.transport.django",
 )
 
 USER_APPS = (
     "todo_everything.apps.accounts.apps.AccountsConfig",
     "todo_everything.apps.todos.apps.TodoConfig",
-)
-
-CELERY_IMPORTS = (
-    "todo_everything.apps.accounts.tasks",
-    "todo_everything.apps.todos.tasks",
 )
 
 INSTALLED_APPS = BASE_APPS + USER_APPS
@@ -92,12 +88,24 @@ WSGI_APPLICATION = "wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+if os.environ.get("DATABASE_NAME"):
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.postgresql",
+            "NAME": os.environ["DATABASE_NAME"],
+            "USER": os.environ["DATABASE_USER"],
+            "PASSWORD": os.environ["DATABASE_PASS"],
+            "HOST": os.environ["DATABASE_HOST"],
+            "PORT": os.environ["DATABASE_PORT"],
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
+    }
 
 
 # Password validation
@@ -147,3 +155,15 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
 }
+
+# Celery/RabbitMQ settings
+CELERY_BROKER_URL = os.environ.get(
+    "RABBITMQ_URL", "pyamqp://guest:guest@rabbitmq:5672//"
+)
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
+CELERY_IMPORTS = (
+    "todo_everything.apps.accounts.tasks",
+    "todo_everything.apps.todos.tasks",
+    #     "todo_everything.apps.todos.tasks.task_todo",
+)
