@@ -21,6 +21,19 @@ services:
       - DATABASE_HOST=postgres
       - DATABASE_PORT=5432
 
+  jobs:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile-web
+    command: poetry run celery --app todo_everything.settings worker -l info
+    volumes:
+      - ./todo_everything:/home/webapp/todo_everything
+    env_file:
+      - ./docker/.env.dev
+    depends_on:
+      - postgres
+      - rabbitmq
+
   postgres:
     image: postgres:16-alpine
     restart: always
@@ -32,6 +45,14 @@ services:
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+
+  rabbitmq:
+    image: rabbitmq:3.12.6-management
+    ports:
+      - "5672:5672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=guest
+      - RABBITMQ_DEFAULT_PASS=guest
 
 volumes:
   pgdata:
