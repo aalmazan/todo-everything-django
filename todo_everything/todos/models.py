@@ -8,3 +8,6 @@ class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models
 
     title = models.CharField(max_length=100, blank=True)
     body = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title or "<blank>"

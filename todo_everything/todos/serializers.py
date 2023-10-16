@@ -7,7 +7,6 @@ class TodoSerializer(ModelSerializer):
     def save(self, **kwargs):
         user = self.context.get("request").user
         obj = super().save(created_by=user, **kwargs)
-        print("Trigger task?")
         tasks.task_todo.delay(obj.id)
         return obj
 

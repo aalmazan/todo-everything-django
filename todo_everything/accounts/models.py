@@ -17,6 +17,9 @@ class Account(AbstractUser):
 
     objects = AccountManager()
 
+    def __str__(self):
+        return self.email
+
     class Meta:
         db_table = "account"
 
@@ -28,6 +31,9 @@ class AccountProfile(models.Model):
         Account, on_delete=models.CASCADE, related_name="profile"
     )
     full_name = models.TextField(max_length=128, null=True, blank=True)
+
+    def __str__(self):
+        return "{} profile".format(self.account.email)
 
     class Meta:
         db_table = "account_profile"

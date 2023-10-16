@@ -1,3 +1,10 @@
-# from django.contrib import admin
+from django.contrib import admin
 
-# Register your models here.
+from . import models as todos_models
+
+
+class TodosAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(todos_models.Todo, TodosAdmin)
