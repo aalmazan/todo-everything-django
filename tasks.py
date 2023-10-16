@@ -16,7 +16,7 @@ def pytest(c, target="."):
     """
     if not target:
         target = ""
-    c.run(f"python -m pytest {target}")
+    c.run(f"cd todo_everything && python -m pytest {target}")
 
 
 @task

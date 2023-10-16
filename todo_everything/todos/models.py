@@ -1,7 +1,6 @@
 from django.db import models
+from mixins.models import common
 from model_utils.models import SoftDeletableModel, TimeStampedModel
-
-from todo_everything.mixins.models import common
 
 
 class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models.Model):
@@ -9,3 +8,6 @@ class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models
 
     title = models.CharField(max_length=100, blank=True)
     body = models.TextField(blank=True)
+
+    def __str__(self):
+        return self.title or "<blank>"

@@ -1,7 +1,6 @@
 import pytest
+from accounts import models as account_models
 from model_bakery import baker
-
-from todo_everything.apps.accounts import models as account_models
 
 # def test_account_factory(account_factory):
 #     assert type(account_factory) == type(AccountFactory)
