@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +31,7 @@ SECRET_KEY = "django-insecure-(y=g^%5t^01kjwml@om%ys%+t+6)1f_(i1n!#@#34+0f@us&jo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = [] + [os.environ["ALLOWED_HOSTS"]]
 
 
 # Application definition
@@ -43,6 +44,7 @@ BASE_APPS = (
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "rest_framework_simplejwt.token_blacklist",
     "celery",
 )
 
@@ -57,6 +59,7 @@ INSTALLED_APPS = BASE_APPS + USER_APPS
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -170,6 +173,11 @@ LOGGING = {
             "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
             "propagate": False,
         },
+        "todo_everything": {
+            "handlers": ["console"],
+            "level": os.getenv("DJANGO_LOG_LEVEL", "INFO"),
+            "propagate": False,
+        },
     },
 }
 
@@ -186,6 +194,11 @@ REST_FRAMEWORK = {
     ],
 }
 
+SIMPLE_JWT = {
+    "SLIDING_TOKEN_LIFETIME": timedelta(minutes=1),
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+}
+
 
 # Celery/RabbitMQ settings
 CELERY_BROKER_URL = os.environ.get(
@@ -193,3 +206,39 @@ CELERY_BROKER_URL = os.environ.get(
 )
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+
+# CORS related
+CORS_ALLOW_CREDENTIALS = True
+CORS_ALLOWED_ORIGINS = [
+    "https://local.whatamidoing.today",
+    "http://pan.whatamidoing.today:8000",
+    "http://pan.whatamidoing.today:5173",
+    "http://localhost:8000",
+    "http://127.0.0.1:8000",
+    "http://localhost:5173",
+    "http://localhost:3000",
+]
+CORS_ALLOW_HEADERS = [
+    "HTTP_X_CSRFTOKEN",
+    "Content-Type",
+    "Authorization",
+    "content-type",
+]
+
+# https://docs.djangoproject.com/en/4.2/ref/settings/
+CSRF_TRUSTED_ORIGINS = CORS_ALLOWED_ORIGINS
+
+
+# Redis sessions
+SESSION_ENGINE = "redis_sessions.session"
+
+SESSION_REDIS = {
+    "host": "redis",
+    "port": 6379,
+    "db": 0,
+    # "password": "password",
+    "prefix": "dj-session",
+    "socket_timeout": 1,
+    "retry_on_timeout": True,
+}

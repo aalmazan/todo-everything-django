@@ -1,11 +1,10 @@
-from accounts import serializers as accounts_serializers
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 
 from . import models, tasks
 
 
-class TodoSerializer(ModelSerializer):
-    created_by = accounts_serializers.AccountSerializer(allow_null=True)
+class TodoSerializer(serializers.ModelSerializer):
+    completed = serializers.DateTimeField(allow_null=True, required=False)
 
     def save(self, **kwargs):
         user = self.context.get("request").user  # type: ignore
@@ -15,6 +14,6 @@ class TodoSerializer(ModelSerializer):
 
     class Meta:
         model = models.Todo
-        read_only_fields = ["created_by", "completed"]
+        read_only_fields = ["created_by"]
         fields = ["id", "title", "body", "created_by", "completed"]
         depth = 1
