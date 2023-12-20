@@ -15,7 +15,7 @@ class Account(AbstractUser):
     username = None
     email = models.EmailField(_("email address"), unique=True)
 
-    objects = AccountManager()
+    objects = AccountManager()  # type: ignore
 
     def __str__(self):
         return self.email
