@@ -14,6 +14,7 @@ class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
     )
 
     class Meta:
+        db_table = "organization"
         ordering = ["name"]
 
     def __str__(self):
@@ -24,3 +25,6 @@ class OrganizationAccounts(TimeStampedModel, models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     account = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # TODO: Add meta things like group, person, inviter (from Django example).
+
+    class Meta:
+        db_table = "organization_accounts"

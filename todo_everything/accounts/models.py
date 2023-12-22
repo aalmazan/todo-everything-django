@@ -6,7 +6,7 @@ from model_utils.models import SoftDeletableModel, TimeStampedModel
 from .managers import AccountManager
 
 
-class Account(AbstractUser):
+class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
     """Custom user account class."""
 
     REQUIRED_FIELDS = []

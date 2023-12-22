@@ -6,7 +6,7 @@ class UserStampedModel(models.Model):
     """Abstract model that adds which user created the model."""
 
     created_by = models.ForeignKey(
-        get_user_model(), on_delete=models.DO_NOTHING, related_name="+"
+        get_user_model(), on_delete=models.SET_DEFAULT, related_name="+", default=1
     )
 
     class Meta:

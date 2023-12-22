@@ -13,6 +13,10 @@ class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models
     body = models.TextField(blank=True)
     completed = models.DateTimeField(null=True, editable=False)
 
+    class Meta:
+        db_table = "todo"
+        ordering = ["-created"]
+
     def __str__(self):
         return self.title or "<blank>"
 
