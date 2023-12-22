@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from model_utils.models import SoftDeletableModel, TimeStampedModel
 
 from .managers import AccountManager
 
@@ -24,7 +25,7 @@ class Account(AbstractUser):
         db_table = "account"
 
 
-class AccountProfile(models.Model):
+class AccountProfile(TimeStampedModel, SoftDeletableModel, models.Model):
     """Additional info for user accounts."""
 
     account = models.OneToOneField(

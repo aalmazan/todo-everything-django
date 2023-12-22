@@ -50,6 +50,7 @@ BASE_APPS = (
 
 USER_APPS = (
     "accounts.apps.AccountsConfig",
+    "organizations.apps.OrganizationsConfig",
     "todos.apps.TodosConfig",
 )
 
