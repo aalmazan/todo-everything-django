@@ -1,24 +1,10 @@
+import logging
+
 from celery import shared_task
 
-
-@shared_task
-def task_todo():
-    print("Running task...")
-    print("Running task...")
-    print("Running task...")
-    print("Running task...")
+logger = logging.getLogger()
 
 
 @shared_task
-def add(x, y):
-    return x + y
-
-
-@shared_task
-def mul(x, y):
-    return x * y
-
-
-@shared_task
-def xsum(numbers):
-    return sum(numbers)
+def notify(notification_name: str):
+    logger.info("Running task with name %s", notification_name)
