@@ -6,3 +6,6 @@ class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
     """Organization model mainly to group `Account`s."""
 
     name = models.CharField(max_length=64)
+
+    def __str__(self):
+        return self.name
