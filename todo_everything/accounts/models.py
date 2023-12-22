@@ -13,7 +13,11 @@ class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
     USERNAME_FIELD = "email"
     EMAIL_FIELD = "email"
 
+    # Remove these fields. Names will go to the profile model.
     username = None
+    first_name = None
+    last_name = None
+
     email = models.EmailField(_("email address"), unique=True)
 
     objects = AccountManager()  # type: ignore
@@ -34,7 +38,7 @@ class AccountProfile(TimeStampedModel, SoftDeletableModel, models.Model):
     full_name = models.TextField(max_length=128, null=True, blank=True)
 
     def __str__(self):
-        return "{} profile".format(self.account.email)
+        return f"{self.account.email} profile"
 
     class Meta:
         db_table = "account_profile"
