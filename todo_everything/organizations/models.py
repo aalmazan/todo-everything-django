@@ -28,3 +28,4 @@ class OrganizationAccounts(TimeStampedModel, models.Model):
 
     class Meta:
         db_table = "organization_accounts"
+        unique_together = ("organization", "account")
