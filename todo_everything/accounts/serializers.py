@@ -12,7 +12,7 @@ class AccountSerializer(serializers.ModelSerializer):
 class AccountSerializerPublic(serializers.ModelSerializer):
     class Meta:
         model = models.Account
-        fields = ["id", "email"]
+        fields = ("id", "email")
 
 
 class AccountProfileSerializer(serializers.ModelSerializer):

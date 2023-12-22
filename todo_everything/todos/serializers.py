@@ -1,15 +1,18 @@
+from accounts import serializers as accounts_serializers
 from rest_framework import serializers
 
-from . import models, tasks
+from . import models
 
 
 class TodoSerializer(serializers.ModelSerializer):
     completed = serializers.DateTimeField(allow_null=True, required=False)
+    created_by = accounts_serializers.AccountSerializerPublic(
+        read_only=True, required=False
+    )
 
     def save(self, **kwargs):
         user = self.context.get("request").user  # type: ignore
         obj = super().save(created_by=user, **kwargs)
-        tasks.task_todo.delay(obj.id)
         return obj
 
     class Meta:

@@ -3,6 +3,8 @@ from django.utils import timezone
 from mixins.models import common
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
+from . import tasks
+
 
 class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models.Model):
     """Main model that contains todo data."""
@@ -25,3 +27,7 @@ class Todo(common.UserStampedModel, TimeStampedModel, SoftDeletableModel, models
         if commit:
             self.save(update_fields=["completed"])
         return self
+
+    def save(self, *args, **kwargs):
+        tasks.task_todo.delay(self.id)
+        return super().save(*args, **kwargs)
