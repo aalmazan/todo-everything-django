@@ -1,11 +1,12 @@
 import logging
 
 from celery import shared_task
-from rmq.rmq_producer import RMQProducer
+
+# from rmq.rmq_producer import RMQProducer
 
 logger = logging.getLogger(__name__)
 
-producer = RMQProducer()
+# producer = RMQProducer()
 
 
 @shared_task
@@ -19,4 +20,4 @@ def task_todo(todo_id: int):
 @shared_task
 def notify(notification_name: str):
     logger.info("Todo notify: %s", notification_name)
-    producer.publish()
+    # producer.publish()
