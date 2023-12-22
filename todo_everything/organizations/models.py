@@ -1,4 +1,4 @@
-from accounts import models as accounts_models
+from django.contrib.auth import get_user_model
 from django.db import models
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
@@ -8,7 +8,7 @@ class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
 
     name = models.CharField(max_length=64)
     accounts = models.ManyToManyField(
-        accounts_models.Account,
+        get_user_model(),
         through="OrganizationAccounts",
         through_fields=("organization", "account"),
     )
@@ -22,5 +22,5 @@ class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
 
 class OrganizationAccounts(TimeStampedModel, models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
-    account = models.ForeignKey(accounts_models.Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # TODO: Add meta things like group, person, inviter (from Django example).
