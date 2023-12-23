@@ -1,11 +1,11 @@
-import logging
+from logging import getLogger
 
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
 from . import models, tasks
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 @receiver(pre_save, sender=models.Account)
