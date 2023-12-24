@@ -3,6 +3,8 @@
   fields:
     email: admin@example.com
     password: 123123
+    is_superuser: true
+    is_staff: true
 - model: accounts.account
   pk: 2
   fields:

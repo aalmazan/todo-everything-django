@@ -12,7 +12,10 @@ class OrganizationViewSet(viewsets.ModelViewSet):
     # https://www.django-rest-framework.org/api-guide/permissions/#setting-the-permission-policy
     # Need the trailing comma in the tuple in order to keep it a
     # tuple/iterable as required by permissions_classes.
-    permission_classes = (permissions.IsAdminUser | org_permissions.IsInOrganization,)
+    permission_classes = (
+        permissions.IsAuthenticated,
+        permissions.IsAdminUser | org_permissions.IsInOrganization,
+    )
 
     def get_queryset(self):
         return self.request.user.organizations.all()

@@ -9,9 +9,7 @@ logger = getLogger(__name__)
 
 class IsInOrganization(permissions.BasePermission):
     def has_object_permission(self, request, view, obj: models.Organization):
-        has_user = request.user
-        is_org_user = request.user.organizations.filter(pk=obj.pk).exists()
-        return has_user and is_org_user
+        return request.user and request.user.organizations.filter(pk=obj.pk).exists()
 
 
 class IsOrganizationAdmin(permissions.BasePermission):
