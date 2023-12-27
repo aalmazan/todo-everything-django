@@ -1,10 +1,13 @@
 from django.contrib import admin
+from organizations.admin import OrganizationAccountsInline
 
 from . import models as accounts_models
 
 
 class AccountAdmin(admin.ModelAdmin):
-    pass
+    inlines = [
+        OrganizationAccountsInline,
+    ]
 
 
 class AccountProfileAdmin(admin.ModelAdmin):

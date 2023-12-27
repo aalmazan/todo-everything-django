@@ -1,7 +1,7 @@
 - model: organizations.organization
   pk: 1
   fields:
-    name: AAA Org
+    name: Default Organization
 - model: organizations.organizationaccounts
   pk: 1
   fields:

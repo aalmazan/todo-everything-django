@@ -28,6 +28,12 @@ class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
     class Meta:
         db_table = "account"
 
+    def get_full_name(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email
+
 
 class AccountProfile(TimeStampedModel, SoftDeletableModel, models.Model):
     """Additional info for user accounts."""

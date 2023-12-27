@@ -2,14 +2,14 @@
   pk: 1
   fields:
     email: admin@example.com
-    password: 123123
+    password: pbkdf2_sha256$600000$8n16F0W4qeWKEeMlUV9BmS$PwDAT9PR1HzfA+WBqueSGaru9QpCqrR0mrm1ponOsdY=
     is_superuser: true
     is_staff: true
 - model: accounts.account
   pk: 2
   fields:
     email: deleted-user@example.com
-    password: 123123
+    password: pbkdf2_sha256$600000$8n16F0W4qeWKEeMlUV9BmS$PwDAT9PR1HzfA+WBqueSGaru9QpCqrR0mrm1ponOsdY=
 - model: accounts.accountprofile
   pk: 1
   fields:
