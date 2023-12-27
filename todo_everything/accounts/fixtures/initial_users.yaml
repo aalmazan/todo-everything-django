@@ -10,6 +10,11 @@
   fields:
     email: deleted-user@example.com
     password: pbkdf2_sha256$600000$8n16F0W4qeWKEeMlUV9BmS$PwDAT9PR1HzfA+WBqueSGaru9QpCqrR0mrm1ponOsdY=
+- model: accounts.account
+  pk: 3
+  fields:
+    email: test@example.com
+    password: pbkdf2_sha256$600000$8n16F0W4qeWKEeMlUV9BmS$PwDAT9PR1HzfA+WBqueSGaru9QpCqrR0mrm1ponOsdY=
 - model: accounts.accountprofile
   pk: 1
   fields:
@@ -18,3 +23,7 @@
   pk: 2
   fields:
     account_id: 2
+- model: accounts.accountprofile
+  pk: 3
+  fields:
+    account_id: 3
