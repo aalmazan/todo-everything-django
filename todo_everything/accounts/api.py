@@ -25,7 +25,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 
 
 class AccountProfileViewSet(viewsets.ModelViewSet):
-    queryset = models.AccountProfile.objects.all()
+    queryset = models.AccountProfile.available_objects.none()
     serializer_class = serializers.AccountProfileSerializer
     permission_classes = [permissions.IsAuthenticated]
 

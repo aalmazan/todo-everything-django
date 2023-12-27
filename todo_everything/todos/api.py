@@ -1,17 +1,19 @@
 import logging
 
 from django.db.models import Q
-from rest_framework import status, viewsets
+from rest_framework import permissions, status, viewsets
 from rest_framework.response import Response
 
-from . import models, permissions, serializers
+from . import models
+from . import permissions as todo_permissions
+from . import serializers
 
 logger = logging.getLogger(__name__)
 
 
 class TodoViewSet(viewsets.ModelViewSet):
     queryset = models.Todo.objects.none()
-    permission_classes = [permissions.IsOwner]
+    permission_classes = [permissions.IsAuthenticated, todo_permissions.IsOwner]
     read_serializer_class = serializers.TodoSerializer
     write_serializer_class = serializers.TodoWriteSerializer
 
@@ -25,6 +27,10 @@ class TodoViewSet(viewsets.ModelViewSet):
         Only show objects that are owned by the user and/or the org provided
         in the query params.
         """
+        if not self.request.user.is_active:
+            # Return the base queryset (should be none or something public-ish)
+            return self.queryset
+
         created_by_self = Q(created_by=self.request.user)
         owned_by_org = self.request.GET.get("org", None)
         if owned_by_org and isinstance(owned_by_org, int):
@@ -32,7 +38,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         else:
             the_filter = Q(created_by_self)
 
-        return models.Todo.objects.filter(the_filter).order_by("-created")
+        return models.Todo.available_objects.filter(the_filter).order_by("-created")
 
     def create(self, request, *args, **kwargs):
         """

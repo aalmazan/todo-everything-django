@@ -6,6 +6,12 @@ from django.db.models.signals import (
     pre_delete,
     pre_save,
 )
+from rest_framework.test import APIRequestFactory
+
+
+@pytest.fixture(autouse=True)
+def api_factory():
+    return APIRequestFactory()
 
 
 @pytest.fixture(autouse=True)
