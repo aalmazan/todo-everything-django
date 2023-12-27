@@ -46,10 +46,13 @@ BASE_APPS = (
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "celery",
+    # Maybe don't include on prod-like things
+    "django_extensions",
 )
 
 USER_APPS = (
     "accounts.apps.AccountsConfig",
+    "organizations.apps.OrganizationsConfig",
     "todos.apps.TodosConfig",
 )
 
@@ -165,7 +168,7 @@ LOGGING = {
     },
     "root": {
         "handlers": ["console"],
-        "level": "WARNING",
+        "level": "INFO",
     },
     "loggers": {
         "django": {
@@ -242,3 +245,9 @@ SESSION_REDIS = {
     "socket_timeout": 1,
     "retry_on_timeout": True,
 }
+
+
+# on_delete defaults, functionality
+# Check: mixins/models/common.py
+DEFAULT_SENTINEL_USER_EMAIL = "deleted-user@example.com"
+DEFAULT_SENTINEL_ORGANIZATION = "<deleted>"

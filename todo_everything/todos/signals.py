@@ -10,5 +10,5 @@ logger = logging.getLogger(__name__)
 
 @receiver(post_save, sender=models.Todo)
 def todo_creation(sender, **kwargs):
-    logger.info("Todo creation triggered")
+    logger.info("<signal> Todo creation triggered")
     tasks.notify.delay("todo_created")

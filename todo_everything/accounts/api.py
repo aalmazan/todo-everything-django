@@ -13,15 +13,12 @@ logger = logging.getLogger("todo_everything.accounts.api")
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.Account.objects.none()
     serializer_class = serializers.AccountSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
     @action(methods=["GET"], detail=False)
     def me(self, request, **kwargs):
-        user = self.request.user
-        logger.info("User exists: %s", self.request.user)
-
-        if not user or not user.is_active:
-            return Response(status=status.HTTP_401_UNAUTHORIZED)
-
+        user = request.user
+        logger.info("User exists: %s", request.user)
         serializer = self.get_serializer(user)
 
         return Response(data=serializer.data, status=status.HTTP_200_OK)
@@ -30,6 +27,7 @@ class AccountViewSet(viewsets.ModelViewSet):
 class AccountProfileViewSet(viewsets.ModelViewSet):
     queryset = models.AccountProfile.objects.all()
     serializer_class = serializers.AccountProfileSerializer
+    permission_classes = [permissions.IsAuthenticated]
 
 
 class AccountRegisterView(views.APIView):

@@ -1,0 +1,15 @@
+- model: organizations.organization
+  pk: 1
+  fields:
+    name: Default Organization
+- model: organizations.organizationaccounts
+  pk: 1
+  fields:
+    account_id: 1
+    organization_id: 1
+- model: organizations.organizationaccounts
+  pk: 2
+  fields:
+    account_id: 2
+    organization_id: 1
+    role: admin

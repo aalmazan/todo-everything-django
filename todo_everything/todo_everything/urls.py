@@ -17,6 +17,7 @@ Including another URLconf
 from accounts import api as accounts_api
 from django.contrib import admin
 from django.urls import include, path
+from organizations import api as organizations_api
 from rest_framework import routers
 from rest_framework_simplejwt.views import (
     TokenBlacklistView,
@@ -27,6 +28,7 @@ from todos import api as todos_api
 
 router = routers.DefaultRouter()
 router.register(r"account", accounts_api.AccountViewSet)
+router.register(r"organizations", organizations_api.OrganizationViewSet)
 router.register(r"profile", accounts_api.AccountProfileViewSet)
 router.register(r"todo", todos_api.TodoViewSet)
 
