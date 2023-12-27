@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from model_utils.models import SoftDeletableModel, TimeStampedModel
 
@@ -33,6 +34,13 @@ class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
 
     def get_short_name(self):
         return self.email
+
+    def has_organization_access(self, organization):
+        if isinstance(organization, int):
+            filter_q = Q(pk=organization)
+        else:
+            filter_q = Q(organization=organization)
+        return self.organizations.filter(filter_q).exists()
 
 
 class AccountProfile(TimeStampedModel, SoftDeletableModel, models.Model):

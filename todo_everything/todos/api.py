@@ -16,13 +16,15 @@ class TodoViewSet(viewsets.ModelViewSet):
     write_serializer_class = serializers.TodoWriteSerializer
 
     def get_serializer_class(self):
-        print("Serializer action: ", self.action)
-        ret = self.read_serializer_class
         if self.action == "create":
-            ret = self.write_serializer_class
-        return ret
+            return self.write_serializer_class
+        return self.read_serializer_class
 
     def get_queryset(self):
+        """
+        Only show objects that are owned by the user and/or the org provided
+        in the query params.
+        """
         created_by_self = Q(created_by=self.request.user)
         owned_by_org = self.request.GET.get("org", None)
         if owned_by_org and isinstance(owned_by_org, int):
@@ -36,6 +38,7 @@ class TodoViewSet(viewsets.ModelViewSet):
         """
         Custom create method to allow write and read serializers to work on a single request.
         """
+        # This serializer is based on the `self.action` of the request.
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
