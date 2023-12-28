@@ -28,7 +28,8 @@ from todos import api as todos_api
 
 router = routers.DefaultRouter()
 router.register(r"account", accounts_api.AccountViewSet)
-router.register(r"organizations", organizations_api.OrganizationViewSet)
+router.register(r"organization", organizations_api.OrganizationViewSet)
+router.register(r"organization-invite", organizations_api.OrganizationInviteViewSet)
 router.register(r"profile", accounts_api.AccountProfileViewSet)
 router.register(r"todo", todos_api.TodoViewSet)
 
@@ -42,5 +43,6 @@ urlpatterns = [
         name="account_register",
     ),
     path("api/", include(router.urls)),
+    path("api/todo-overview/", todos_api.TodoOverviewView.as_view()),
     path("admin/", admin.site.urls),
 ]

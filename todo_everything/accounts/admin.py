@@ -5,6 +5,7 @@ from . import models as accounts_models
 
 
 class AccountAdmin(admin.ModelAdmin):
+    fields = ("email", "password", "is_active", "is_staff", "is_superuser")
     inlines = [
         OrganizationAccountsInline,
     ]

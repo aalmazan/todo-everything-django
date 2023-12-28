@@ -58,8 +58,10 @@ class OrganizationInvite(TimeStampedModel, models.Model):
         related_name="accounts_invited",
     )
     invited_email = models.EmailField(_("Email address of the invitation"))
-    # `invited_account` will be populated once a user creates an account from an invitation.
-    # Also note that a single user can be invited to many orgs, but should only have one invitation per org.
+    # `invited_account` will be populated if the user already had an account
+    # or once the user accepts an invitation.
+    # Also note that a single user can be invited to many orgs, but should
+    # only have one invitation per org.
     invited_account = models.ForeignKey(
         get_user_model(),
         on_delete=models.CASCADE,
