@@ -10,6 +10,14 @@ from . import models, serializers
 logger = logging.getLogger("todo_everything.accounts.api")
 
 
+class AccountDashboardView(views.APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, format=None):
+        user = request.user
+        return Response(data={"wat": "wat", "user": user.pk}, status=status.HTTP_200_OK)
+
+
 class AccountViewSet(viewsets.ModelViewSet):
     queryset = models.Account.objects.none()
     serializer_class = serializers.AccountSerializer
@@ -39,6 +47,14 @@ class AccountRegisterView(views.APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
-        user = models.Account.objects.create_user(**serializer.validated_data)
-        serialized_user = serializers.AccountSerializer(user)
-        return Response(status=status.HTTP_201_CREATED, data=serialized_user.data)
+        models.Account.objects.create_user(**serializer.validated_data)
+        # Use this if we want to respond with user data
+        # serialized_user = serializers.AccountSerializer(user)
+
+        # But using this instead because the frontend would like to use
+        # authenticated requests as soon as possible, without another request.
+        tokens = serializers.AccountRegisterResponseSerializer().validate(
+            serializer.validated_data
+        )
+
+        return Response(status=status.HTTP_201_CREATED, data=tokens)
