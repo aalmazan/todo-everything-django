@@ -43,6 +43,7 @@ urlpatterns = [
         name="account_register",
     ),
     path("api/", include(router.urls)),
+    path("api/dashboard/", accounts_api.AccountDashboardView.as_view()),
     path("api/todo-overview/", todos_api.TodoOverviewView.as_view()),
     path("admin/", admin.site.urls),
 ]

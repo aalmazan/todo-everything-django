@@ -14,7 +14,7 @@ def get_sentinel_organization():
 # https://docs.djangoproject.com/en/dev/ref/models/fields/#django.db.models.SET
 def get_sentinel_user():
     return get_user_model().objects.get_or_create(
-        email=settings.get("DEFAULT_SENTINEL_USER_EMAI")
+        email=settings.get("DEFAULT_SENTINEL_USER_EMAIL")
     )[0]
 
 
@@ -25,6 +25,21 @@ class UserStampedModel(models.Model):
         get_user_model(),
         on_delete=models.SET(get_sentinel_user),
         related_name="+",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class UserAssignedModel(models.Model):
+    """Abstract model that allows users to be assigned."""
+
+    assigned_to = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.SET(get_sentinel_user),
+        related_name="+",
+        blank=True,
+        null=True,
     )
 
     class Meta:

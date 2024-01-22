@@ -28,6 +28,7 @@ class AccountProfileSerializer(serializers.ModelSerializer):
 
 
 class AccountRegisterSerializer(serializers.Serializer):
+    full_name = serializers.CharField(max_length=128, required=True)
     email = serializers.EmailField(
         required=True,
         validators=[

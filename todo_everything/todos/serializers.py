@@ -11,6 +11,8 @@ logger = logging.getLogger(__name__)
 
 class TodoSerializer(serializers.ModelSerializer):
     completed = serializers.DateTimeField(allow_null=True, required=False)
+    due_on = serializers.DateTimeField(allow_null=True, required=False)
+    started_on = serializers.DateTimeField(allow_null=True, required=False)
     created_by = accounts_serializers.AccountSerializerPublic(
         read_only=True, required=False
     )
@@ -20,8 +22,19 @@ class TodoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = models.Todo
-        read_only_fields = ["created_by"]
-        fields = ["id", "title", "body", "created_by", "completed", "organization"]
+        read_only_fields = ["created_by", "created", "modified"]
+        fields = [
+            "id",
+            "title",
+            "body",
+            "completed",
+            "due_on",
+            "started_on",
+            "organization",
+            "modified",
+            "created",
+            "created_by",
+        ]
         depth = 1
 
 

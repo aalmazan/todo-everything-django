@@ -46,3 +46,7 @@ def test_organizations_is_org_admin(api_factory):
     response = view(request)
     assert response.status_code == HTTP_200_OK
     assert len(response.data) == 1
+
+
+def test_organizations_invite(api_factory):
+    pass

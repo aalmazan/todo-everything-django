@@ -16,10 +16,17 @@ ORGANIZATION_ROLES = [
 class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
     """Organization model mainly to group `Account`s."""
 
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=128)
+    is_self_org = models.BooleanField(
+        default=False,
+        db_index=True,
+        editable=False,
+        help_text="Is this organization a user's personal organization?",
+        verbose_name="self organization",
+    )
     accounts = models.ManyToManyField(
         get_user_model(),
-        through="OrganizationAccounts",
+        through="OrganizationAccount",
         through_fields=("organization", "account"),
         related_name="organizations",
     )
@@ -32,7 +39,7 @@ class Organization(TimeStampedModel, SoftDeletableModel, models.Model):
         return self.name
 
 
-class OrganizationAccounts(TimeStampedModel, models.Model):
+class OrganizationAccount(TimeStampedModel, models.Model):
     organization = models.ForeignKey(Organization, on_delete=models.CASCADE)
     account = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
     # TODO: Add meta things like group, person, inviter (from Django example).
@@ -41,7 +48,7 @@ class OrganizationAccounts(TimeStampedModel, models.Model):
     )
 
     class Meta:
-        db_table = "organization_accounts"
+        db_table = "organization_account"
         unique_together = ("organization", "account")
 
 
