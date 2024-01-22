@@ -1,5 +1,9 @@
+from logging import getLogger
+
 from django.contrib.auth.models import BaseUserManager
 from django.db import transaction
+
+logger = getLogger(__name__)
 
 
 class AccountManager(BaseUserManager):
@@ -17,6 +21,7 @@ class AccountManager(BaseUserManager):
 
     @transaction.atomic
     def create_user(self, email, password=None, **extra_fields):
+        logger.info("Extra fields? %s", extra_fields)
         extra_fields.setdefault("is_staff", False)
         extra_fields.setdefault("is_superuser", False)
         return self._create_user(email, password, **extra_fields)

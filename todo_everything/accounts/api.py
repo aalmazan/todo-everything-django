@@ -1,4 +1,4 @@
-import logging
+from logging import getLogger
 
 from rest_framework import permissions, status, views, viewsets
 from rest_framework.decorators import action
@@ -7,7 +7,7 @@ from rest_framework.serializers import ValidationError
 
 from . import models, serializers
 
-logger = logging.getLogger("todo_everything.accounts.api")
+logger = getLogger(__name__)
 
 
 class AccountDashboardView(views.APIView):
@@ -47,7 +47,13 @@ class AccountRegisterView(views.APIView):
         if not serializer.is_valid():
             raise ValidationError(serializer.errors)
 
-        models.Account.objects.create_user(**serializer.validated_data)
+        # Pull out `full_name` as that goes to the `AccountProfile` model.
+        user_fields = {**serializer.validated_data}
+        profile_fields = {"full_name": user_fields.pop("full_name")}
+
+        account = models.Account.objects.create_user(**user_fields)
+        models.AccountProfile.objects.create(account=account, **profile_fields)
+
         # Use this if we want to respond with user data
         # serialized_user = serializers.AccountSerializer(user)
 

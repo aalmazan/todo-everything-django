@@ -20,7 +20,6 @@ class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
     last_name = None
 
     email = models.EmailField(_("email address"), unique=True)
-    full_name = models.CharField(max_length=128)
 
     objects = AccountManager()  # type: ignore
 
@@ -31,7 +30,7 @@ class Account(TimeStampedModel, SoftDeletableModel, AbstractUser):
         db_table = "account"
 
     def get_full_name(self):
-        return self.full_name
+        return self.email
 
     def get_short_name(self):
         return self.email
