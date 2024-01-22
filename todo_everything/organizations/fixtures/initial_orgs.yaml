@@ -2,14 +2,14 @@
   pk: 1
   fields:
     name: Default Organization
-#- model: organizations.organizationaccount
-#  pk: 1
-#  fields:
-#    account_id: 1
-#    organization_id: 1
-#- model: organizations.organizationaccount
-#  pk: 2
-#  fields:
-#    account_id: 2
-#    organization_id: 1
-#    role: admin
+- model: organizations.organizationaccount
+  pk: 1
+  fields:
+    account_id: 1
+    organization_id: 1
+- model: organizations.organizationaccount
+  pk: 2
+  fields:
+    account_id: 2
+    organization_id: 1
+    role: admin
