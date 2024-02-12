@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import permissions, viewsets
 
 from . import models
@@ -19,3 +20,21 @@ class OrganizationViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         return self.request.user.organizations.all()
+
+
+class OrganizationInviteViewSet(viewsets.ModelViewSet):
+    queryset = models.OrganizationInvite.objects.none()
+    serializer_class = serializers.OrganizationInviteSerializer
+    permission_classes = [
+        permissions.IsAuthenticated,
+        permissions.IsAdminUser | org_permissions.IsOrganizationAdmin,
+    ]
+
+    def get_queryset(self):
+        is_inviter = Q(account_inviter=self.request.user)
+        # Only get instances where the user was already attached.
+        # Checking invites via current user email would be dangerous since a
+        # user can change their email at any time and query against current
+        # invites for that email.
+        is_invited = Q(invited_account=self.request.user)
+        return self.queryset.filter(is_inviter | is_invited)

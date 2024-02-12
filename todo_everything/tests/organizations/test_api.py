@@ -3,7 +3,7 @@ from accounts import models as accounts_models
 from django.core.management import call_command
 from organizations import api as organizations_api
 from rest_framework.status import HTTP_200_OK, HTTP_401_UNAUTHORIZED
-from rest_framework.test import APIRequestFactory, force_authenticate
+from rest_framework.test import force_authenticate
 
 
 # Tests here require the initial users fixture so we run that here.
@@ -12,26 +12,23 @@ from rest_framework.test import APIRequestFactory, force_authenticate
 @pytest.fixture(scope="session")
 def django_db_setup(django_db_setup, django_db_blocker):
     with django_db_blocker.unblock():
-        print("django db setup???")
         call_command("loaddata", "initial_users")
         call_command("loaddata", "initial_orgs")
 
 
-def test_organizations_unauthorized():
+def test_organizations_unauthorized(api_factory):
     view = organizations_api.OrganizationViewSet.as_view({"get": "list"})
-    factory = APIRequestFactory()
-    request = factory.get("/api/organizations")
+    request = api_factory.get("/api/organizations/")
     response = view(request)
     assert response.status_code == HTTP_401_UNAUTHORIZED
 
 
 @pytest.mark.django_db
-def test_organizations_is_staff():
+def test_organizations_is_staff(api_factory):
     view = organizations_api.OrganizationViewSet.as_view({"get": "list"})
-    factory = APIRequestFactory()
     user = accounts_models.Account.objects.get(pk=1)
     assert user.is_staff
-    request = factory.get("/api/organizations")
+    request = api_factory.get("/api/organizations/")
     force_authenticate(request, user=user)
     response = view(request)
     assert response.status_code == HTTP_200_OK
@@ -39,14 +36,17 @@ def test_organizations_is_staff():
 
 
 @pytest.mark.django_db
-def test_organizations_is_org_admin():
+def test_organizations_is_org_admin(api_factory):
     view = organizations_api.OrganizationViewSet.as_view({"get": "list"})
-    factory = APIRequestFactory()
     user = accounts_models.Account.objects.get(pk=2)
     assert not user.is_staff
     assert not user.is_superuser
-    request = factory.get("/api/organizations")
+    request = api_factory.get("/api/organizations/")
     force_authenticate(request, user=user)
     response = view(request)
     assert response.status_code == HTTP_200_OK
     assert len(response.data) == 1
+
+
+def test_organizations_invite(api_factory):
+    pass

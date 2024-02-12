@@ -3,14 +3,14 @@ from django.contrib import admin
 from . import models as org_models
 
 
-class OrganizationAccountsInline(admin.TabularInline):
-    model = org_models.OrganizationAccounts
+class OrganizationAccountInline(admin.TabularInline):
+    model = org_models.OrganizationAccount
     extra = 1
 
 
 class OrganizationAdmin(admin.ModelAdmin):
     inlines = [
-        OrganizationAccountsInline,
+        OrganizationAccountInline,
     ]
 
 

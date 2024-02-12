@@ -46,6 +46,7 @@ BASE_APPS = (
     "rest_framework",
     "rest_framework_simplejwt.token_blacklist",
     "celery",
+    "django_filters",
     # Maybe don't include on prod-like things
     "django_extensions",
 )
@@ -195,6 +196,7 @@ REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ],
+    "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"],
 }
 
 SIMPLE_JWT = {

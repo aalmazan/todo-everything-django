@@ -15,13 +15,13 @@ def pre_account_creation(sender, **kwargs):
 
 
 @receiver(post_save, sender=models.Account)
-def create_profile(sender, **kwargs):
-    instance = kwargs.pop("instance", None)
+def post_account_create(sender, **kwargs):
+    # instance = kwargs.pop("instance", None)
     created = kwargs.pop("created", False)
     full_name = kwargs.pop("full_name", "")
 
-    logger.info("Account creation triggered")
+    logger.info("Account creation triggered: %s %s", full_name, created)
     tasks.notify.delay("account_created")
 
-    if created:
-        models.AccountProfile.objects.create(account=instance, full_name=full_name)
+    # if created:
+    #     models.AccountProfile.objects.create(account=instance, full_name=full_name)
