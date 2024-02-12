@@ -1,9 +1,55 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.db.models import Max
+from django.utils import timezone
 from mixins.models import common
-from model_utils.models import SoftDeletableModel, TimeStampedModel
+from model_utils.models import (
+    SoftDeletableManager,
+    SoftDeletableModel,
+    TimeStampedModel,
+)
 
 from . import tasks
+
+Account = get_user_model()
+
+
+class TodoManager(SoftDeletableManager):
+    def completed(self):
+        return self.get_queryset().filter(completed__isnull=False)
+
+    def not_completed(self):
+        return self.get_queryset().filter(completed__isnull=True)
+
+    def unassigned(self):
+        return self.get_queryset().filter(assigned_to__isnull=True)
+
+    def assigned(self):
+        return self.get_queryset().filter(assigned_to__isnull=False)
+
+    def for_org(self, organization=None, user=None):
+        qs = self.get_queryset()
+        if organization:
+            return qs.filter(organization=organization)
+        elif user and not organization:
+            orgs = user.organizations.all()
+            return qs.filter(organization__in=orgs)
+        else:
+            raise ValueError("One of `organization` or `user` is required")
+
+    def for_user(self, user: Account):
+        return self.get_queryset().filter(created_by=user)
+
+    def due_today(self):
+        return self.get_queryset().filter(
+            due_on__gte=timezone.now().replace(hour=0, minute=0, second=0),
+            due_on__lte=timezone.now().replace(hour=23, minute=59, second=59),
+        )
+
+    def started_not_done(self):
+        return self.get_queryset().filter(
+            started_on__isnull=False, completed__isnull=True
+        )
 
 
 class Todo(
@@ -22,6 +68,7 @@ class Todo(
     completed = models.DateTimeField(null=True, editable=False)
     due_on = models.DateTimeField(null=True, blank=True)
     started_on = models.DateTimeField(null=True, blank=True)
+    todos = TodoManager()
 
     class Meta:
         db_table = "todo"

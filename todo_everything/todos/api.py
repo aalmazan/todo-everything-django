@@ -2,6 +2,7 @@ import logging
 
 from django.db.models import Count, Q
 from rest_framework import permissions, status, views, viewsets
+from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from . import models
@@ -34,6 +35,7 @@ class TodoViewSet(viewsets.ModelViewSet):
             # Return the base queryset (should be none or something public-ish)
             return self.queryset
 
+        # TODO: Somehow put logic into manager? Possibly in user manager
         created_by_self = Q(created_by=self.request.user)
         owned_by_org = self.request.query_params.get("org", None)
         if owned_by_org and isinstance(owned_by_org, int):
@@ -42,6 +44,27 @@ class TodoViewSet(viewsets.ModelViewSet):
             the_filter = created_by_self
 
         return models.Todo.available_objects.filter(the_filter)
+
+    @action(methods=["GET"], detail=False)
+    def today(self, request, *args, **kwargs):
+        queryset = (models.Todo.todos.for_user(self.request.user)) & (
+            models.Todo.todos.started_not_done() | models.Todo.todos.due_today()
+        )
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=["GET"], detail=False)
+    def assigned(self, request, *args, **kwargs):
+        queryset = models.Todo.todos.assigned()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+    @action(methods=["GET"], detail=False)
+    def unassigned(self, request, *args, **kwargs):
+        queryset = models.Todo.todos.unassigned()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def create(self, request, *args, **kwargs):
         """
